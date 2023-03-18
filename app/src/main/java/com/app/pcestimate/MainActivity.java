@@ -15,8 +15,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // test
+//        startActivity(new Intent(this, ActivityPriceSelector.class));
+//        finish();
+
         startActivity(new Intent(this, ActivityPriceSelector.class));
-        finish();
+//        finish();
 
     }
 }
