@@ -10,6 +10,9 @@ import androidx.databinding.DataBindingUtil;
 
 import com.app.pcestimate.R;
 import com.app.pcestimate.databinding.ActivityMainBoardBinding;
+import com.app.pcestimate.datamodel.PostDataModel;
+
+import java.util.ArrayList;
 
 public class ActivityMainBoard extends AppCompatActivity {
     private ActivityMainBoardBinding mBinding;
@@ -21,11 +24,27 @@ public class ActivityMainBoard extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main_board);
 
         initVariable();
+        getPosts();
         onViewClick();
     }
 
     private void initVariable() {
+        //presenter 싱글톤 사용을 위해서 getInstance() 최초 한번 호출
+        PresenterPost.getInstance();
+    }
 
+    private void getPosts() {
+        PresenterPost.getInstance().getPost(new PresenterPost.IPostsResultCallback() {
+            @Override
+            public void onResult(ArrayList<PostDataModel> list) {
+
+            }
+
+            @Override
+            public void onError(String erMsg) {
+
+            }
+        });
     }
 
     private void onViewClick() {

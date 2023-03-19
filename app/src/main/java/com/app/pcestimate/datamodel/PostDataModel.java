@@ -12,6 +12,8 @@ public class PostDataModel {
     ArrayList<ReplayInfo> replies;
 //    ArrayList<Uri> pictures;
 
+    public PostDataModel() {
+    };
 
     public PostDataModel(String title, String content, String password, ArrayList<ReplayInfo> replies) {
         this.title = title;
