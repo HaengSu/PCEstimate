@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.app.pcestimate.view.board.ActivityMainBoard;
 import com.app.pcestimate.view.estimate.ActivityPriceSelector;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
 //        startActivity(new Intent(this, ActivityPriceSelector.class));
 //        finish();
 
-        startActivity(new Intent(this, ActivityPriceSelector.class));
-//        finish();
 
+        startActivity(new Intent(this, ActivityMainBoard.class));
+        finish();
     }
 }

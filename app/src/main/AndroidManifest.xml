@@ -35,6 +35,13 @@
         <activity android:name=".view.estimate.ActivityEstimateResult"
             android:exported="true"/>
 
+        <activity android:name=".view.board.ActivityMainBoard"
+            android:exported="true"/>
+
+        <activity android:name=".view.board.ActivityWritePost"
+            android:exported="true"/>
+
+
     </application>
 
 </manifest>
