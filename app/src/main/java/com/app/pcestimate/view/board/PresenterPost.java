@@ -70,14 +70,11 @@ public class PresenterPost {
                         data.setContent(String.valueOf(res.get("content")));
                         data.setPassword(String.valueOf(res.get("password")));
                         data.setReplies(new ArrayList<ReplayInfo>((Collection<? extends ReplayInfo>) res.get("replies")));
-                        Log.i(TAG, "onSuccess: data ="+ data.getReplies());
-//                        data.setReplies();
+//                        Log.i(TAG, "onSuccess: data ="+ data.getReplies());
                         postsList.add(data);
-
+                        callback.onResult(postsList);
                     }
                 }
-
-
             }
         });
         return true;
