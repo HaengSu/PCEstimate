@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.app.pcestimate.databinding.ActivityDetailPostBinding;
 import com.app.pcestimate.datamodel.PostDataModel;
 
-import java.util.ArrayList;
+// TODO: 2023/03/23  => 수정 , 삭제 클릭시 비밀번호 확인하는 다이얼로그 띄우고 성공시 글작성페이지로 데이터 그대로 이동하여 수정 , 삭제시 파이어베이스 데이터 삭제
+// TODO: 2023/03/23  => 댓글 작성시 실시간 업데이트 기능 추가
+
 
 public class ActivityDetailPost extends AppCompatActivity {
     private ActivityDetailPostBinding mBinding;
