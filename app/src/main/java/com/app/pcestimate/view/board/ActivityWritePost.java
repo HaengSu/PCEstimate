@@ -14,6 +14,8 @@ import com.app.pcestimate.datamodel.PostDataModel;
 
 import java.util.ArrayList;
 
+// TODO: 2023/03/23 => 사진 넣기 기능 추가 및 파이어베이스 스토리지로 전송하여 url로 변경
+
 public class ActivityWritePost extends AppCompatActivity {
     private ActivityWritePostBinding mBinding;
     private static final String TAG = "##H";
@@ -45,10 +47,6 @@ public class ActivityWritePost extends AppCompatActivity {
     }
 
     private void onViewClick() {
-        mBinding.btCancelWrite.setOnClickListener(v -> {
-            finish();
-        });
-
         mBinding.btCreateWrite.setOnClickListener(v -> {
             String title = mBinding.edTitleWrite.getText().toString();
             String content = mBinding.edContentWrite.getText().toString();
