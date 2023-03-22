@@ -1,6 +1,7 @@
 package com.app.pcestimate.view.board;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 public class ActivityWritePost extends AppCompatActivity {
     private ActivityWritePostBinding mBinding;
+    private static final String TAG = "##H";
 
 
     @Override
@@ -23,11 +25,23 @@ public class ActivityWritePost extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_write_post);
 
         initVariable();
-
+        getPostItem();
         onViewClick();
     }
 
+
     private void initVariable() {
+    }
+
+    private void getPostItem() {
+        PostDataModel getI = (PostDataModel) getIntent().getSerializableExtra("PostInfo");
+
+        // 넘어온 데이터가 있을 경우
+        if (getI != null) {
+//            Log.i(TAG, "getPostItem: posttitle = " + getI.getTitle());
+            mBinding.edTitleWrite.setText(getI.getTitle());
+            mBinding.edContentWrite.setText(getI.getContent());
+        }
     }
 
     private void onViewClick() {

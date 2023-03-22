@@ -2,9 +2,10 @@ package com.app.pcestimate.datamodel;
 
 import android.net.Uri;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PostDataModel {
+public class PostDataModel implements Serializable {
 
     String title;
     String content;

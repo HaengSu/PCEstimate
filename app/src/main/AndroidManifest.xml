@@ -40,6 +40,10 @@
 
         <activity android:name=".view.board.ActivityWritePost"
             android:exported="true"/>
+        <activity android:name=".view.board.ActivityPostSearch"
+            android:exported="true"/>
+        <activity android:name=".view.board.ActivityDetailPost"
+            android:exported="true"/>
 
 
     </application>

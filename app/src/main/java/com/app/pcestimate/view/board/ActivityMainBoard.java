@@ -3,9 +3,7 @@ package com.app.pcestimate.view.board;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
-import androidx.annotation.ContentView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -20,9 +18,9 @@ import java.util.ArrayList;
 public class ActivityMainBoard extends AppCompatActivity {
     private static final String TAG = "##H";
     private ActivityMainBoardBinding mBinding;
-    private AdapterMainBoard mAdapter;
+    private AdapterBoard mAdapter;
     private ArrayList<PostDataModel> pList;
-
+    private ArrayList<PostDataModel> searchList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,9 +35,10 @@ public class ActivityMainBoard extends AppCompatActivity {
     private void initVariable() {
         //presenter 싱글톤 사용을 위해서 getInstance() 최초 한번 호출
         PresenterPost.getInstance();
+        searchList = new ArrayList<>();
 
         pList = new ArrayList<>();
-        mAdapter = new AdapterMainBoard(pList);
+        mAdapter = new AdapterBoard(pList);
         mBinding.rePosts.setLayoutManager(new LinearLayoutManager(this));
         mBinding.rePosts.setAdapter(mAdapter);
     }
@@ -48,12 +47,13 @@ public class ActivityMainBoard extends AppCompatActivity {
         PresenterPost.getInstance().getPost(new PresenterPost.IPostsResultCallback() {
             @Override
             public void onResult(ArrayList<PostDataModel> list) {
+                pList = list;
                 mAdapter.updatePostList(list);
             }
 
             @Override
             public void onError(String erMsg) {
-                Log.e("##H", "onError: error = "+erMsg );
+                Log.e("##H", "onError: error = " + erMsg);
             }
         });
     }
@@ -64,22 +64,10 @@ public class ActivityMainBoard extends AppCompatActivity {
         });
 
         mBinding.imSearchMainBoard.setOnClickListener(v -> {
-            mBinding.layoutSearchMainBoard.setVisibility(View.VISIBLE);
+            Intent i = new Intent(this, ActivityPostSearch.class);
+            i.putExtra("postList", pList);
+            startActivity(i);
         });
-
-        mBinding.imSearchEditBoard.setOnClickListener(v -> {
-            searchPost();
-        });
-
-        mBinding.imBackMainBoard.setOnClickListener(view -> {
-            mBinding.layoutSearchMainBoard.setVisibility(View.GONE);
-        });
-    }
-
-    private void searchPost() {
-        String keyword = mBinding.edSearchPost.getText().toString();
-        Log.i(TAG, "searchPost : keyword = "+keyword);
-
     }
 }
 

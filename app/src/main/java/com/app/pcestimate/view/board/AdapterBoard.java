@@ -1,6 +1,8 @@
 package com.app.pcestimate.view.board;
 
-import android.annotation.SuppressLint;
+import static java.sql.DriverManager.println;
+
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.pcestimate.R;
 import com.app.pcestimate.datamodel.PostDataModel;
-import com.app.pcestimate.view.estimate.adapter.AdapterPcCard;
 
 import java.util.ArrayList;
 
-public class AdapterMainBoard extends RecyclerView.Adapter<AdapterMainBoard.ViewHolderMainBoard> {
+public class AdapterBoard extends RecyclerView.Adapter<AdapterBoard.ViewHolderMainBoard> {
     private ArrayList<PostDataModel> pList;
 
-    public AdapterMainBoard(ArrayList<PostDataModel> list) {
+    public AdapterBoard(ArrayList<PostDataModel> list) {
         this.pList = list;
     }
 
@@ -34,7 +35,8 @@ public class AdapterMainBoard extends RecyclerView.Adapter<AdapterMainBoard.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolderMainBoard holder, int position) {
         holder.title.setText(pList.get(position).getTitle());
-        holder.replayCount.setText(pList.get(position).getReplies().size()+"");
+        holder.replayCount.setText("["+pList.get(position).getReplies().size()+""+"]");
+        holder.onItemClick();
     }
 
     @Override
@@ -47,6 +49,11 @@ public class AdapterMainBoard extends RecyclerView.Adapter<AdapterMainBoard.View
         notifyItemChanged(0,pList.size());
     }
 
+    public void resetPostList (ArrayList<PostDataModel> list) {
+        pList = list;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolderMainBoard extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView replayCount;
@@ -55,7 +62,18 @@ public class AdapterMainBoard extends RecyclerView.Adapter<AdapterMainBoard.View
             super(itemView);
             title = itemView.findViewById(R.id.tv_title_item_post);
             replayCount = itemView.findViewById(R.id.tv_re_count_item_post);
+
+            onItemClick();
         }
+
+        private void onItemClick() {
+            itemView.setOnClickListener(v -> {
+                Intent i = new Intent(itemView.getContext(), ActivityDetailPost.class);
+                i.putExtra("PostInfo", pList.get(getAdapterPosition()));
+                itemView.getContext().startActivity(i);
+            });
+        }
+
 
     }
 }
