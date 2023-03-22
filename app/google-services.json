@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "329466635950",
+    "project_id": "pcestimate-deb19",
+    "storage_bucket": "pcestimate-deb19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329466635950:android:2938082894405e362e2f3f",
+        "android_client_info": {
+          "package_name": "com.app.pcestimate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329466635950-5a643pud52ul9od5ucgjkmcapnvgjsqe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.pcestimate",
+            "certificate_hash": "27576ae31bb3dd75c5edbf30cd77c406062ff787"
+          }
+        },
+        {
+          "client_id": "329466635950-n8mkrss24udn5lrulb3507jkia9dnluf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCynG5T1C0E8iH9n55ZAEcXkn_5d1rQ24w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329466635950-n8mkrss24udn5lrulb3507jkia9dnluf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

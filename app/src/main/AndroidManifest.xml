@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,6 +27,25 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name=".view.estimate.ActivityPriceSelector"
+            android:exported="true"/>
+
+        <activity android:name=".view.estimate.ActivityEstimateResult"
+            android:exported="true"/>
+
+        <activity android:name=".view.board.ActivityMainBoard"
+            android:exported="true"/>
+
+        <activity android:name=".view.board.ActivityWritePost"
+            android:exported="true"/>
+        <activity android:name=".view.board.ActivityPostSearch"
+            android:exported="true"/>
+        <activity android:name=".view.board.ActivityDetailPost"
+            android:exported="true"/>
+
+
     </application>
 
 </manifest>
