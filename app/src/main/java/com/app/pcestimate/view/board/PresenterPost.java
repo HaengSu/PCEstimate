@@ -1,17 +1,17 @@
 package com.app.pcestimate.view.board;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.app.pcestimate.datamodel.PcDataModel;
+import androidx.annotation.NonNull;
+
 import com.app.pcestimate.datamodel.PostDataModel;
-import com.app.pcestimate.datamodel.ReplayInfo;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -62,19 +62,42 @@ public class PresenterPost {
 
                 if (!queryDocumentSnapshots.isEmpty()) {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        //getId() = documentId를 가져온다
+                        Log.i("##INFO", "onSuccess(): data = "+ snapshot.getId());
                         HashMap<String, PostDataModel> res = new HashMap<>();
                         res = (HashMap<String, PostDataModel>) snapshot.get("Posts");
 
-                        PostDataModel data = new PostDataModel();
-                        data.setTitle(String.valueOf(res.get("title")));
-                        data.setContent(String.valueOf(res.get("content")));
-                        data.setPassword(String.valueOf(res.get("password")));
-                        data.setReplies(new ArrayList<ReplayInfo>((Collection<? extends ReplayInfo>) res.get("replies")));
-//                        Log.i(TAG, "onSuccess: data ="+ data.getReplies());
-                        postsList.add(data);
-                        callback.onResult(postsList);
+                        if (res != null) {
+                            PostDataModel data = new PostDataModel();
+                            data.setId(snapshot.getId());
+                            data.setTitle(String.valueOf(res.get("title")));
+                            data.setContent(String.valueOf(res.get("content")));
+                            data.setPassword(String.valueOf(res.get("password")));
+                            data.setReplies(new ArrayList<String>((Collection<? extends String>) res.get("replies")));
+
+                            //region ---- Test Section  ---
+                            Log.i("##INFO", "onSuccess(): data.getId = "+data.getId());
+                            //endregion
+                            postsList.add(data);
+                            callback.onResult(postsList);
+                        }
                     }
                 }
+            }
+        });
+        return true;
+    }
+
+    public Boolean setReply(PostDataModel postInfo) {
+        db.collection(COLLECTION_PATH).document(postInfo.getId()).update("Posts", postInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.i("##INFO", "onSuccess(): success");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("##INFO", "onFailure(): e = "+e.getMessage());
             }
         });
         return true;

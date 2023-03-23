@@ -1,5 +1,6 @@
 package com.app.pcestimate.view.board;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class ActivityWritePost extends AppCompatActivity {
 
             Boolean res = PresenterPost.getInstance().setPost(new PostDataModel(title, content, password, new ArrayList<>()));
             if (res) {
+                startActivity(new Intent(this, ActivityMainBoard.class));
                 finish();
             } else {
                 Toast.makeText(this, "게시글 작성에 실패하였습니다.", Toast.LENGTH_SHORT).show();

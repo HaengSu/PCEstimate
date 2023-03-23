@@ -61,6 +61,7 @@ public class ActivityMainBoard extends AppCompatActivity {
     private void onViewClick() {
         mBinding.imWriteMainBoard.setOnClickListener(v -> {
             startActivity(new Intent(this, ActivityWritePost.class));
+            finish();
         });
 
         mBinding.imSearchMainBoard.setOnClickListener(v -> {
