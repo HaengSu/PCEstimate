@@ -129,6 +129,15 @@
                     app:layout_constraintStart_toEndOf="@id/tv_add_image"
                     app:layout_constraintTop_toTopOf="@id/tv_add_image" />
 
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:id="@+id/im_test"
+                    app:layout_constraintTop_toTopOf="@id/ibt_get_photo_write"
+                    app:layout_constraintBottom_toBottomOf="@id/ibt_get_photo_write"
+                    app:layout_constraintStart_toEndOf="@id/ibt_get_photo_write"
+                    android:layout_marginStart="16dp"/>
+
 
                 <ImageButton
                     android:id="@+id/ibt_get_photo_write"
