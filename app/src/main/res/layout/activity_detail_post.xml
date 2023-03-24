@@ -93,10 +93,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
+                    android:id="@+id/tv_modify_content"
                     android:text="[ 수정 ]" />
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:id="@+id/tv_delete_content"
                     android:layout_height="wrap_content"
                     android:text="[ 삭제 ]" />
 
@@ -108,7 +110,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="50dp"
             android:background="@color/white"
             app:layout_constraintBottom_toTopOf="@id/layout_replay_detail"
             app:layout_constraintTop_toBottomOf="@id/layout_content_detail_post">

@@ -20,7 +20,8 @@ import java.util.ArrayList;
 public class ActivityWritePost extends AppCompatActivity {
     private ActivityWritePostBinding mBinding;
     private static final String TAG = "##H";
-
+    private String postId = "";
+    private ArrayList<String> replies = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,29 +38,36 @@ public class ActivityWritePost extends AppCompatActivity {
     }
 
     private void getPostItem() {
-        PostDataModel getI = (PostDataModel) getIntent().getSerializableExtra("PostInfo");
+        PostDataModel getPostData = (PostDataModel) getIntent().getSerializableExtra("postInfo");
 
         // 넘어온 데이터가 있을 경우
-        if (getI != null) {
-//            Log.i(TAG, "getPostItem: posttitle = " + getI.getTitle());
-            mBinding.edTitleWrite.setText(getI.getTitle());
-            mBinding.edContentWrite.setText(getI.getContent());
+        if (getPostData != null) {
+            mBinding.edTitleWrite.setText(getPostData.getTitle());
+            mBinding.edContentWrite.setText(getPostData.getContent());
+            mBinding.edPasswordWrite.setText(getPostData.getPassword());
+            postId = getPostData.getId();
+            replies = getPostData.getReplies();
         }
     }
 
     private void onViewClick() {
         mBinding.btCreateWrite.setOnClickListener(v -> {
+
             String title = mBinding.edTitleWrite.getText().toString();
             String content = mBinding.edContentWrite.getText().toString();
             String password = mBinding.edPasswordWrite.getText().toString();
 
-            Boolean res = PresenterPost.getInstance().setPost(new PostDataModel(title, content, password, new ArrayList<>()));
+            Boolean res = PresenterPost.getInstance().setPost(new PostDataModel(title, content, password, replies),postId);
             if (res) {
                 startActivity(new Intent(this, ActivityMainBoard.class));
                 finish();
             } else {
                 Toast.makeText(this, "게시글 작성에 실패하였습니다.", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        mBinding.imBackWrite.setOnClickListener(v -> {
+            finish();
         });
     }
 }

@@ -64,7 +64,7 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
 
         private void onItemClick() {
             cancel.setOnClickListener(v -> {
-                callback.clickDelete(rList.get(getAdapterPosition()));
+                callback.clickDelete(rList.get(getAdapterPosition()),getAdapterPosition());
             });
         }
     }
@@ -74,7 +74,7 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
     }
 
     interface OnItemClick {
-        void clickDelete(String reply);
+        void clickDelete(String reply,int position);
     }
 }
 

@@ -36,20 +36,35 @@ public class PresenterPost {
     }
 
 
-    public Boolean setPost(PostDataModel postInfo) {
+    public Boolean setPost(PostDataModel postInfo,String postId) {
         if (postInfo == null) return false;
 
         if (postInfo.getTitle().isEmpty() || postInfo.getContent().isEmpty() || postInfo.getPassword().isEmpty())
             return false;
+        Log.i("##INFO", "setPost(): getId = "+ postInfo.getId());
+        if (!postId.isEmpty()) {
+            //case -> 게시글 수정
+            db.collection(COLLECTION_PATH).document(postId).update("Posts", postInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
 
-        Map<String, PostDataModel> posts = new HashMap<>();
-        posts.put("Posts", postInfo);
+                }
+            }).addOnFailureListener(e -> {
+                Log.e(TAG, "setPost: error >>" + e);
+            });
+        } else {
+            //case -> 게시글 첫 작성
+            Map<String, PostDataModel> posts = new HashMap<>();
+            posts.put("Posts", postInfo);
 
-        db.collection(COLLECTION_PATH).add(posts).addOnSuccessListener(documentReference -> {
+            db.collection(COLLECTION_PATH).add(posts).addOnSuccessListener(documentReference -> {
 
-        }).addOnFailureListener(e -> {
-            Log.e(TAG, "setPost: error >>" + e);
-        });
+            }).addOnFailureListener(e -> {
+                Log.e(TAG, "setPost: error >>" + e);
+            });
+        }
+
+
 
         return true;
     }
@@ -92,16 +107,48 @@ public class PresenterPost {
         db.collection(COLLECTION_PATH).document(postInfo.getId()).update("Posts", postInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                Log.i("##INFO", "onSuccess(): success");
+                Log.i("##INFO", "setReply(): success");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i("##INFO", "onFailure(): e = "+e.getMessage());
+                Log.i("##INFO", "setReply(): e = "+e.getMessage());
             }
         });
         return true;
     }
+
+
+    public Boolean deleteReply(PostDataModel postInfo) {
+        db.collection(COLLECTION_PATH).document(postInfo.getId()).update("Posts",postInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.i("##INFO", "deleteReply(): success");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("##INFO", "deleteReply(): e = "+e.getMessage());
+            }
+        });
+        return true;
+        }
+
+
+        public Boolean deletePost(PostDataModel postInfo) {
+            db.collection(COLLECTION_PATH).document(postInfo.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    Log.i("##INFO", "deletePost(): success");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.i("##INFO", "deletePost(): e = "+e.getMessage());
+                }
+            });
+        return true;
+        }
 
     public interface IPostsResultCallback {
         void onResult(ArrayList<PostDataModel> list);
