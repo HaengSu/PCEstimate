@@ -11,4 +11,7 @@
 
     <color name="navy_50">#F5F5FF</color>
     <color name="navy_200">#7979FF</color>
+    <color name="gray_50">#F5F5F5</color>
+    <color name="gray_300">#D6D6D6</color>
+    <color name="gray_500">#848484</color>
 </resources>

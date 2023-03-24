@@ -7,16 +7,17 @@ import java.util.ArrayList;
 
 public class PostDataModel implements Serializable {
 
+    String id;
     String title;
     String content;
     String password;
-    ArrayList<ReplayInfo> replies;
+    ArrayList<String> replies;
 //    ArrayList<Uri> pictures;
 
     public PostDataModel() {
     };
 
-    public PostDataModel(String title, String content, String password, ArrayList<ReplayInfo> replies) {
+    public PostDataModel(String title, String content, String password, ArrayList<String> replies) {
         this.title = title;
         this.content = content;
         this.password = password;
@@ -47,15 +48,23 @@ public class PostDataModel implements Serializable {
         this.password = password;
     }
 
-    public ArrayList<ReplayInfo> getReplies() {
+    public ArrayList<String> getReplies() {
         return replies;
     }
 
-    public void setReplies(ArrayList<ReplayInfo> replies) {
+    public void setReplies(ArrayList<String> replies) {
         this.replies = replies;
     }
 
-//    public ArrayList<Uri> getPictures() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    //    public ArrayList<Uri> getPictures() {
 //        return pictures;
 //    }
 //

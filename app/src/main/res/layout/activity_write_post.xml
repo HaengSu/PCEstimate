@@ -11,8 +11,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,6 +70,12 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:background="@drawable/background_round4_gray300"
+                    android:hint="제목을 입력해 주세요"
+                    android:paddingStart="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="10dp"
                     app:layout_constraintTop_toBottomOf="@id/tv_title_write" />
 
 
@@ -91,6 +97,13 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
+                    android:background="@drawable/background_round4_gray300"
+                    android:gravity="top"
+                    android:hint="내용을 입력해 주세요"
+                    android:paddingStart="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="10dp"
                     app:layout_constraintTop_toBottomOf="@id/tv_content_write" />
 
 
@@ -115,6 +128,15 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_add_image"
                     app:layout_constraintStart_toEndOf="@id/tv_add_image"
                     app:layout_constraintTop_toTopOf="@id/tv_add_image" />
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:id="@+id/im_test"
+                    app:layout_constraintTop_toTopOf="@id/ibt_get_photo_write"
+                    app:layout_constraintBottom_toBottomOf="@id/ibt_get_photo_write"
+                    app:layout_constraintStart_toEndOf="@id/ibt_get_photo_write"
+                    android:layout_marginStart="16dp"/>
 
 
                 <ImageButton
@@ -145,8 +167,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginBottom="80dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@id/tv_password_write"
                     app:layout_constraintTop_toBottomOf="@id/tv_password_write"
                     app:passwordToggleEnabled="true">
@@ -160,20 +182,20 @@
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Button
+                    android:id="@+id/bt_create_write"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="작성하기"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintVertical_bias="0.764"
+                    tools:layout_editor_absoluteX="0dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <Button
-            android:id="@+id/bt_create_write"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="작성하기"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.764"
-            tools:layout_editor_absoluteX="0dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

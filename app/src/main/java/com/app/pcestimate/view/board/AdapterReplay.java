@@ -1,6 +1,5 @@
 package com.app.pcestimate.view.board;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.pcestimate.R;
-import com.app.pcestimate.datamodel.PostDataModel;
-import com.app.pcestimate.datamodel.ReplayInfo;
 
 import java.util.ArrayList;
 
 public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolderReplay> {
-    private ArrayList<ReplayInfo> rList;
+    private ArrayList<String> rList;
     private OnItemClick callback;
 
-    public AdapterReplay(ArrayList<ReplayInfo> list) {
+    public AdapterReplay(ArrayList<String> list) {
         this.rList = list;
     }
 
@@ -34,6 +31,7 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderReplay holder, int position) {
+        holder.replyContent.setText(rList.get(position));
     }
 
     @Override
@@ -41,12 +39,12 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
         return rList.size();
     }
 
-    public void updateReplyList(ArrayList<ReplayInfo> list) {
+    public void updateReplyList(ArrayList<String> list) {
         rList = list;
         notifyItemChanged(0, rList.size());
     }
 
-    public void resetReplyList(ArrayList<ReplayInfo> list) {
+    public void resetReplyList(ArrayList<String> list) {
         rList = list;
         notifyDataSetChanged();
     }
@@ -66,7 +64,7 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
 
         private void onItemClick() {
             cancel.setOnClickListener(v -> {
-                callback.clickDelete(rList.get(getAdapterPosition()));
+                callback.clickDelete(rList.get(getAdapterPosition()),getAdapterPosition());
             });
         }
     }
@@ -76,7 +74,7 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
     }
 
     interface OnItemClick {
-        void clickDelete(ReplayInfo reply);
+        void clickDelete(String reply,int position);
     }
 }
 
