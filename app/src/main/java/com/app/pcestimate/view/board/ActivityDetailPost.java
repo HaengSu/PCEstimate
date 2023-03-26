@@ -62,10 +62,12 @@ public class ActivityDetailPost extends AppCompatActivity {
             if (postInfo.getPictures().size() == 0) return;
 
             if (postInfo.getPictures().size() == 2) {
-                Uri uri = Uri.parse(postInfo.getPictures().get(0));
+                Uri uri = Uri.parse(postInfo.getPictures().get(1));
                 Glide.with(this).load(uri).into(mBinding.imTwoDetailPost);
+                mBinding.imTwoDetailPost.setVisibility(View.VISIBLE);
             }
             Glide.with(this).load(postInfo.getPictures().get(0)).into(mBinding.imOneDetailPost);
+            mBinding.imOneDetailPost.setVisibility(View.VISIBLE);
         }
 
         setReplyData();
@@ -199,6 +201,13 @@ public class ActivityDetailPost extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, ActivityMainBoard.class));
+        finish();
+        super.onBackPressed();
     }
 }
 
