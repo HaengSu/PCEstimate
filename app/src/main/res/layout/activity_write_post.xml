@@ -130,24 +130,59 @@
                     app:layout_constraintTop_toTopOf="@id/tv_add_image" />
 
                 <ImageView
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:id="@+id/im_test"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:id="@+id/im_one_write"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/background_round4_gray300"
                     app:layout_constraintTop_toTopOf="@id/ibt_get_photo_write"
                     app:layout_constraintBottom_toBottomOf="@id/ibt_get_photo_write"
-                    app:layout_constraintStart_toEndOf="@id/ibt_get_photo_write"
+                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="16dp"/>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/image_cancel"
+                    android:id="@+id/im_one_cancel_write"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginTop="3dp"
+                    app:layout_constraintTop_toTopOf="@id/im_one_write"
+                    app:layout_constraintEnd_toEndOf="@id/im_one_write"/>
+
+
+                <ImageView
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:id="@+id/im_two_write"
+                    android:background="@drawable/background_round4_gray300"
+                    app:layout_constraintTop_toTopOf="@id/im_one_write"
+                    app:layout_constraintBottom_toBottomOf="@id/im_one_write"
+                    app:layout_constraintStart_toEndOf="@+id/im_one_write"
+                    android:layout_marginStart="8dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/image_cancel"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginTop="3dp"
+                    android:id="@+id/im_two_cancel_write"
+                    app:layout_constraintTop_toTopOf="@id/im_two_write"
+                    app:layout_constraintEnd_toEndOf="@id/im_two_write"/>
 
                 <ImageButton
                     android:id="@+id/ibt_get_photo_write"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/image_add_photo"
                     android:text="사진"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/im_two_write"
                     app:layout_constraintTop_toBottomOf="@id/tv_add_image" />
 
 
@@ -159,7 +194,8 @@
                     android:text="비밀번호"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="@id/ibt_get_photo_write"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ibt_get_photo_write" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -179,6 +215,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberPassword"
                         android:maxLength="4"
+                        android:text="1111"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 

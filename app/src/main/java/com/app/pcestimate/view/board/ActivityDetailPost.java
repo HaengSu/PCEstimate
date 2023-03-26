@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +21,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.app.pcestimate.R;
 import com.app.pcestimate.databinding.ActivityDetailPostBinding;
 import com.app.pcestimate.datamodel.PostDataModel;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+
+import javax.microedition.khronos.opengles.GL;
 
 public class ActivityDetailPost extends AppCompatActivity {
     private ActivityDetailPostBinding mBinding;
@@ -55,6 +59,13 @@ public class ActivityDetailPost extends AppCompatActivity {
             mBinding.tvTitleDetailPost.setText(postInfo.getTitle());
             mBinding.tvContentDetailPost.setText(postInfo.getContent());
             mBinding.tvRepliesCountDetailPost.setText(postInfo.getReplies().size() + "");
+            if (postInfo.getPictures().size() == 0) return;
+
+            if (postInfo.getPictures().size() == 2) {
+                Uri uri = Uri.parse(postInfo.getPictures().get(0));
+                Glide.with(this).load(uri).into(mBinding.imTwoDetailPost);
+            }
+            Glide.with(this).load(postInfo.getPictures().get(0)).into(mBinding.imOneDetailPost);
         }
 
         setReplyData();
@@ -95,7 +106,7 @@ public class ActivityDetailPost extends AppCompatActivity {
                         postInfo.setReplies(replyList);
                         PresenterPost.getInstance().deleteReply(postInfo);
                         dlg.dismiss();
-                        mBinding.tvRepliesCountDetailPost.setText(replyList.size()+"");
+                        mBinding.tvRepliesCountDetailPost.setText(replyList.size() + "");
                         Toast.makeText(ActivityDetailPost.this, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(ActivityDetailPost.this, "비밀번호가 틀립니다", Toast.LENGTH_SHORT).show();
@@ -116,12 +127,12 @@ public class ActivityDetailPost extends AppCompatActivity {
 
             mAdapter.updateReplyList(replyList);
             mBinding.edReplyDetail.setText("");
-            mBinding.tvRepliesCountDetailPost.setText(replyList.size()+"");
+            mBinding.tvRepliesCountDetailPost.setText(replyList.size() + "");
 
             //댓글 입력시 자동으로 키보드 내림
             View view = this.getCurrentFocus();
             if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
@@ -137,11 +148,11 @@ public class ActivityDetailPost extends AppCompatActivity {
             dlg.show();
 
             //상단에 취소키를 눌렀을때 다이얼로그창 종료
-            dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener( t -> {
+            dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(t -> {
                 dlg.dismiss();
             });
 
-            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener( t -> {
+            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(t -> {
                 String password = postInfo.getPassword();
                 String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
 
@@ -169,18 +180,18 @@ public class ActivityDetailPost extends AppCompatActivity {
             dlg.show();
 
             //상단에 취소키를 눌렀을때 다이얼로그창 종료
-            dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener( t -> {
+            dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(t -> {
                 dlg.dismiss();
             });
 
-            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener( t -> {
+            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(t -> {
                 String password = postInfo.getPassword();
                 String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
 
                 if (inputPassword.equals(password)) {
                     dlg.dismiss();
-                    Intent i = new Intent(ActivityDetailPost.this,ActivityWritePost.class);
-                    i.putExtra("postInfo",postInfo);
+                    Intent i = new Intent(ActivityDetailPost.this, ActivityWritePost.class);
+                    i.putExtra("postInfo", postInfo);
                     startActivity(i);
                     finish();
                 } else {
