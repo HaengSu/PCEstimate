@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.pcestimate.R;
 import com.app.pcestimate.datamodel.Replies;
+import com.google.firebase.firestore.model.ObjectValue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolderReplay> {
     private ArrayList<Replies> rList;
@@ -32,7 +34,10 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderReplay holder, int position) {
-        holder.replyContent.setText(rList.get(position).getReply());
+        Object a = rList.get(position);
+        HashMap<String,String> h = (HashMap<String, String>) a;
+        h.get("reply");
+        holder.replyContent.setText(h.get("reply"));
     }
 
     @Override
@@ -65,7 +70,9 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
 
         private void onItemClick() {
             cancel.setOnClickListener(v -> {
-                callback.clickDelete(rList.get(getAdapterPosition()).getReply(),getAdapterPosition());
+                Object a = rList.get(getAdapterPosition());
+                HashMap<String,String> h = (HashMap<String, String>) a;
+                callback.clickDelete(h.get("reply"),getAdapterPosition());
             });
         }
     }

@@ -25,6 +25,7 @@ import com.app.pcestimate.datamodel.Replies;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.microedition.khronos.opengles.GL;
 
@@ -86,37 +87,36 @@ public class ActivityDetailPost extends AppCompatActivity {
             @Override
             public void clickDelete(String reply, int position) {
                 // TODO: 2023/04/01 각 댓글 비밀번호 적용으로 인하여 댓글 삭제부분 코드 수정 필요
-//                Dialog dlg = new Dialog(ActivityDetailPost.this, R.style.theme_dialog);
-//                dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                dlg.setCanceledOnTouchOutside(false);
-//                dlg.setCancelable(false);
-//                dlg.setContentView(R.layout.dialog_check_password);
-//                dlg.show();
-//
-//                //상단에 취소키를 눌렀을때 다이얼로그창 종료
-//                dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(v -> {
-//                    dlg.dismiss();
-//                });
-//
-//                //댓글 삭제버튼 클릭시
-//                dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(v -> {
-//                    String password = postInfo.getPassword();
-//                    String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
-//
-//                    if (inputPassword.equals(password)) {
-//                        replyList.remove(position);
-//                        mAdapter.resetReplyList(replyList);
-//
-//                        postInfo.setReplies(replyList);
-//                        PresenterPost.getInstance().deleteReply(postInfo);
-//                        dlg.dismiss();
-//                        mBinding.tvRepliesCountDetailPost.setText(replyList.size() + "");
-//                        Toast.makeText(ActivityDetailPost.this, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(ActivityDetailPost.this, "비밀번호가 틀립니다", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                managePasswordDialog();
+
+                //상단에 취소키를 눌렀을때 다이얼로그창 종료
+                dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(v -> {
+                    dlg.dismiss();
+                });
+
+                //댓글 삭제버튼 클릭시
+                dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(v -> {
+                    Object a = postInfo.getReplies().get(position);
+                    HashMap<String,String> h = (HashMap<String, String>) a;
+                    h.get("replayPassword");
+
+                    String password = String.valueOf(h.get("replayPassword"));
+                    String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
+
+                    Log.i("##INFO", "clickDelete(): pass =" +password);
+                    if (inputPassword.equals(password)) {
+                        replyList.remove(position);
+                        mAdapter.resetReplyList(replyList);
+
+                        postInfo.setReplies(replyList);
+                        PresenterPost.getInstance().deleteReply(postInfo);
+                        dlg.dismiss();
+                        mBinding.tvRepliesCountDetailPost.setText(replyList.size() + "");
+                        Toast.makeText(ActivityDetailPost.this, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ActivityDetailPost.this, "비밀번호가 틀립니다", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         mBinding.imBackDetailPost.setOnClickListener(v -> {
