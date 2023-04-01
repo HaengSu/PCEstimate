@@ -10,14 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.pcestimate.R;
+import com.app.pcestimate.datamodel.Replies;
 
 import java.util.ArrayList;
 
 public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolderReplay> {
-    private ArrayList<String> rList;
+    private ArrayList<Replies> rList;
     private OnItemClick callback;
 
-    public AdapterReplay(ArrayList<String> list) {
+    public AdapterReplay(ArrayList<Replies> list) {
         this.rList = list;
     }
 
@@ -31,7 +32,7 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderReplay holder, int position) {
-        holder.replyContent.setText(rList.get(position));
+        holder.replyContent.setText(rList.get(position).getReply());
     }
 
     @Override
@@ -39,12 +40,12 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
         return rList.size();
     }
 
-    public void updateReplyList(ArrayList<String> list) {
+    public void updateReplyList(ArrayList<Replies> list) {
         rList = list;
-        notifyItemChanged(0, rList.size());
+        notifyDataSetChanged();
     }
 
-    public void resetReplyList(ArrayList<String> list) {
+    public void resetReplyList(ArrayList<Replies> list) {
         rList = list;
         notifyDataSetChanged();
     }
@@ -64,7 +65,7 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
 
         private void onItemClick() {
             cancel.setOnClickListener(v -> {
-                callback.clickDelete(rList.get(getAdapterPosition()),getAdapterPosition());
+                callback.clickDelete(rList.get(getAdapterPosition()).getReply(),getAdapterPosition());
             });
         }
     }

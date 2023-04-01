@@ -215,7 +215,6 @@
                         android:layout_height="wrap_content"
                         android:inputType="numberPassword"
                         android:maxLength="4"
-                        android:text="1111"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -233,6 +232,15 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
+        <ProgressBar
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:visibility="gone"
+            android:id="@+id/pr_loading_post"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

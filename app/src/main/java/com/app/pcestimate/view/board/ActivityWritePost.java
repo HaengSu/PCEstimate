@@ -24,6 +24,7 @@ import androidx.databinding.DataBindingUtil;
 import com.app.pcestimate.R;
 import com.app.pcestimate.databinding.ActivityWritePostBinding;
 import com.app.pcestimate.datamodel.PostDataModel;
+import com.app.pcestimate.datamodel.Replies;
 import com.app.pcestimate.util.FileUtils;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,7 +44,7 @@ public class ActivityWritePost<ActivityBoardWriter> extends AppCompatActivity {
     private ActivityWritePostBinding mBinding;
     private static final String TAG = "##H";
     private String postId = "";
-    private ArrayList<String> replies = new ArrayList<>();
+    private ArrayList<Replies> replies = new ArrayList<>();
     private ArrayList<String> imageUriList = new ArrayList<>();
     private ArrayList<Bitmap> bitmapList = new ArrayList<>();
     private int maxSize = 2;
@@ -56,8 +57,6 @@ public class ActivityWritePost<ActivityBoardWriter> extends AppCompatActivity {
         initVariable();
         setPostItem();
         onViewClick();
-
-
     }
 
     //region ---- getImages Section  ---
@@ -125,7 +124,6 @@ public class ActivityWritePost<ActivityBoardWriter> extends AppCompatActivity {
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                     .build());
         } else {
-
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -166,12 +164,14 @@ public class ActivityWritePost<ActivityBoardWriter> extends AppCompatActivity {
 
     private void onViewClick() {
         mBinding.btCreateWrite.setOnClickListener(v -> {
+            mBinding.prLoadingPost.setVisibility(View.VISIBLE);
             //user 입력란에 공백이 있는지에 대한 확인
             String title = mBinding.edTitleWrite.getText().toString();
             String content = mBinding.edContentWrite.getText().toString();
             String password = mBinding.edPasswordWrite.getText().toString();
             if (title.isEmpty() && content.isEmpty() && password.isEmpty()) {
                 Toast.makeText(this, "빈 부분이 있습니다", Toast.LENGTH_SHORT).show();
+                mBinding.prLoadingPost.setVisibility(View.GONE);
             } else if (!bitmapList.isEmpty()) {
                 bitmapList.forEach(image -> {
                     getImageUri(image);
@@ -200,7 +200,7 @@ public class ActivityWritePost<ActivityBoardWriter> extends AppCompatActivity {
             if (!imageUriList.isEmpty()) {
                 imageUriList.remove(0);
             }
-            if (!bitmapList.isEmpty()){
+            if (!bitmapList.isEmpty()) {
                 bitmapList.remove(0);
             }
         });
@@ -210,7 +210,7 @@ public class ActivityWritePost<ActivityBoardWriter> extends AppCompatActivity {
             if (!imageUriList.isEmpty()) {
                 imageUriList.remove(1);
             }
-            if (!bitmapList.isEmpty()){
+            if (!bitmapList.isEmpty()) {
                 bitmapList.remove(1);
             }
         });

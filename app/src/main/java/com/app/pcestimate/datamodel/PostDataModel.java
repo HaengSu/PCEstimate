@@ -11,7 +11,7 @@ public class PostDataModel implements Serializable {
     String title;
     String content;
     String password;
-    ArrayList<String> replies;
+    ArrayList<Replies> replies;
     ArrayList<String> pictures;
 
     public PostDataModel() {
@@ -19,7 +19,7 @@ public class PostDataModel implements Serializable {
 
     ;
 
-    public PostDataModel(String title, String content, String password, ArrayList<String> replies, ArrayList<String> pictures) {
+    public PostDataModel(String title, String content, String password, ArrayList<Replies> replies, ArrayList<String> pictures) {
         this.title = title;
         this.content = content;
         this.password = password;
@@ -58,11 +58,11 @@ public class PostDataModel implements Serializable {
         this.password = password;
     }
 
-    public ArrayList<String> getReplies() {
+    public ArrayList<Replies> getReplies() {
         return replies;
     }
 
-    public void setReplies(ArrayList<String> replies) {
+    public void setReplies(ArrayList<Replies> replies) {
         this.replies = replies;
     }
 
@@ -82,4 +82,5 @@ public class PostDataModel implements Serializable {
         this.pictures = pictures;
     }
 }
+
 
