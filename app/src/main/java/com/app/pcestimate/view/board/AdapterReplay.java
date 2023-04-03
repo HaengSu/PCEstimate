@@ -1,5 +1,6 @@
 package com.app.pcestimate.view.board;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,13 +32,19 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
         return new ViewHolderReplay(view);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolderReplay holder, int position) {
         Object a = rList.get(position);
-        HashMap<String,String> h = (HashMap<String, String>) a;
-        h.get("reply");
-        holder.replyContent.setText(h.get("reply"));
+        if (a instanceof HashMap) {
+            HashMap<String,String> h = (HashMap<String, String>) a;
+            holder.replyContent.setText(h.get("reply"));
+            Log.i("##INFO", "onBindViewHolder(): h.get(\"reply\") = "+ h.get("reply"));
+        } else {
+            Replies h = (Replies) a;
+            holder.replyContent.setText(h.getReply());
+            Log.i("##INFO", "onBindViewHolder(): h = "+ h.getReply());
+            Log.i("##INFO", "onBindViewHolder(): rList.get(position) = "+ rList.get(position).getReply());
+        }
     }
 
     @Override
@@ -71,8 +78,13 @@ public class AdapterReplay extends RecyclerView.Adapter<AdapterReplay.ViewHolder
         private void onItemClick() {
             cancel.setOnClickListener(v -> {
                 Object a = rList.get(getAdapterPosition());
-                HashMap<String,String> h = (HashMap<String, String>) a;
-                callback.clickDelete(h.get("reply"),getAdapterPosition());
+                if (a instanceof HashMap) {
+                    HashMap<String,String> h = (HashMap<String, String>) a;
+                    callback.clickDelete(h.get("reply"),getAdapterPosition());
+                } else {
+                    Replies h = (Replies) a;
+                    callback.clickDelete(h.getReply(),getAdapterPosition());
+                }
             });
         }
     }

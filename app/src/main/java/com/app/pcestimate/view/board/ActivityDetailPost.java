@@ -86,7 +86,6 @@ public class ActivityDetailPost extends AppCompatActivity {
         mAdapter.onItemClickListener(new AdapterReplay.OnItemClick() {
             @Override
             public void clickDelete(String reply, int position) {
-                // TODO: 2023/04/01 각 댓글 비밀번호 적용으로 인하여 댓글 삭제부분 코드 수정 필요
                 managePasswordDialog();
 
                 //상단에 취소키를 눌렀을때 다이얼로그창 종료
@@ -96,14 +95,19 @@ public class ActivityDetailPost extends AppCompatActivity {
 
                 //댓글 삭제버튼 클릭시
                 dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(v -> {
+                    String password;
                     Object a = postInfo.getReplies().get(position);
-                    HashMap<String,String> h = (HashMap<String, String>) a;
-                    h.get("replayPassword");
+                    if (a instanceof HashMap) {
+                        HashMap<String, String> h = (HashMap<String, String>) a;
+                        h.get("replayPassword");
+                        password = String.valueOf(h.get("replayPassword"));
+                    } else {
+                        Replies h = (Replies) a;
+                        password = String.valueOf(h.getReplayPassword());
+                    }
 
-                    String password = String.valueOf(h.get("replayPassword"));
                     String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
 
-                    Log.i("##INFO", "clickDelete(): pass =" +password);
                     if (inputPassword.equals(password)) {
                         replyList.remove(position);
                         mAdapter.resetReplyList(replyList);
@@ -124,27 +128,27 @@ public class ActivityDetailPost extends AppCompatActivity {
             finish();
         });
 
+        //댓글 작성 후 보내기 버튼 클릭시 발생 이벤트
         mBinding.imSendDetail.setOnClickListener(v -> {
-            // TODO: 2023/04/01 작성 버튼 클릭시 팝업생성 후 데이터 저장
             managePasswordDialog();
-            String reply = mBinding.edReplyDetail.getText().toString();
-
-            //상단에 취소키를 눌렀을때 다이얼로그창 종료
 
             dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(t -> {
-                String password = postInfo.getPassword();
+                String reply = mBinding.edReplyDetail.getText().toString();
                 String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
-                Log.i("##INFO", "onViewClick(): replay = "+reply);
                 Replies re = new Replies(reply, Integer.parseInt(inputPassword));
+                Log.i("##INFO", "onViewClick(): re.getReply() = " + reply);
                 replyList.add(re);
+                Log.i("##INFO", "onViewClick(): replayList.size = " + replyList.size());
                 postInfo.setReplies(replyList);
                 PresenterPost.getInstance().setReply(postInfo);
                 dlg.dismiss();
+
+                mAdapter.updateReplyList(replyList);
+                mBinding.edReplyDetail.setText("");
             });
 
-            mAdapter.updateReplyList(replyList);
-            mBinding.edReplyDetail.setText("");
-            mBinding.tvRepliesCountDetailPost.setText(replyList.size() + "");
+            Log.i("##INFO", "onViewClick(): replayList.size = " + replyList.size());
+//            mBinding.tvRepliesCountDetailPost.setText(replyList.size() + "");
 
             //댓글 입력시 자동으로 키보드 내림
             View view = this.getCurrentFocus();
@@ -215,7 +219,6 @@ public class ActivityDetailPost extends AppCompatActivity {
         dlg.setCancelable(false);
         dlg.setContentView(R.layout.dialog_check_password);
         dlg.show();
-
 
         dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(t -> {
             dlg.dismiss();
