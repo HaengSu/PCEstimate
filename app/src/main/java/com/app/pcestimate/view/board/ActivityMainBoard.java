@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.app.pcestimate.R;
 import com.app.pcestimate.databinding.ActivityMainBoardBinding;
 import com.app.pcestimate.datamodel.PostDataModel;
+import com.app.pcestimate.datamodel.Replies;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ActivityMainBoard extends AppCompatActivity {
     private static final String TAG = "##H";
@@ -48,6 +50,11 @@ public class ActivityMainBoard extends AppCompatActivity {
             @Override
             public void onResult(ArrayList<PostDataModel> list) {
                 pList = list;
+                //region ---- Test Section  ---
+                PostDataModel reList = pList.get(0);
+//                pList.get(0).setReplies(reList);
+
+                //endregion
                 mAdapter.updatePostList(list);
             }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,15 +21,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.app.pcestimate.R;
 import com.app.pcestimate.databinding.ActivityDetailPostBinding;
 import com.app.pcestimate.datamodel.PostDataModel;
+import com.app.pcestimate.datamodel.Replies;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.microedition.khronos.opengles.GL;
 
 public class ActivityDetailPost extends AppCompatActivity {
     private ActivityDetailPostBinding mBinding;
     private static final String TAG = "##H";
     private PostDataModel postInfo;
-    private ArrayList<String> replyList;
+    private ArrayList<Replies> replyList;
     private AdapterReplay mAdapter;
+    private Dialog dlg;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +62,15 @@ public class ActivityDetailPost extends AppCompatActivity {
             mBinding.tvTitleDetailPost.setText(postInfo.getTitle());
             mBinding.tvContentDetailPost.setText(postInfo.getContent());
             mBinding.tvRepliesCountDetailPost.setText(postInfo.getReplies().size() + "");
+            if (postInfo.getPictures().size() == 0) return;
+
+            if (postInfo.getPictures().size() == 2) {
+                Uri uri = Uri.parse(postInfo.getPictures().get(1));
+                Glide.with(this).load(uri).into(mBinding.imTwoDetailPost);
+                mBinding.imTwoDetailPost.setVisibility(View.VISIBLE);
+            }
+            Glide.with(this).load(postInfo.getPictures().get(0)).into(mBinding.imOneDetailPost);
+            mBinding.imOneDetailPost.setVisibility(View.VISIBLE);
         }
 
         setReplyData();
@@ -70,13 +86,7 @@ public class ActivityDetailPost extends AppCompatActivity {
         mAdapter.onItemClickListener(new AdapterReplay.OnItemClick() {
             @Override
             public void clickDelete(String reply, int position) {
-                Dialog dlg = new Dialog(ActivityDetailPost.this, R.style.theme_dialog);
-                dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dlg.setCanceledOnTouchOutside(false);
-                dlg.setCancelable(false);
-                dlg.setContentView(R.layout.dialog_check_password);
-                dlg.show();
+                managePasswordDialog();
 
                 //상단에 취소키를 눌렀을때 다이얼로그창 종료
                 dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(v -> {
@@ -85,7 +95,17 @@ public class ActivityDetailPost extends AppCompatActivity {
 
                 //댓글 삭제버튼 클릭시
                 dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(v -> {
-                    String password = postInfo.getPassword();
+                    String password;
+                    Object a = postInfo.getReplies().get(position);
+                    if (a instanceof HashMap) {
+                        HashMap<String, String> h = (HashMap<String, String>) a;
+                        h.get("replayPassword");
+                        password = String.valueOf(h.get("replayPassword"));
+                    } else {
+                        Replies h = (Replies) a;
+                        password = String.valueOf(h.getReplayPassword());
+                    }
+
                     String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
 
                     if (inputPassword.equals(password)) {
@@ -95,7 +115,7 @@ public class ActivityDetailPost extends AppCompatActivity {
                         postInfo.setReplies(replyList);
                         PresenterPost.getInstance().deleteReply(postInfo);
                         dlg.dismiss();
-                        mBinding.tvRepliesCountDetailPost.setText(replyList.size()+"");
+                        mBinding.tvRepliesCountDetailPost.setText(replyList.size() + "");
                         Toast.makeText(ActivityDetailPost.this, "댓글이 삭제되었습니다", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(ActivityDetailPost.this, "비밀번호가 틀립니다", Toast.LENGTH_SHORT).show();
@@ -108,40 +128,46 @@ public class ActivityDetailPost extends AppCompatActivity {
             finish();
         });
 
+        //댓글 작성 후 보내기 버튼 클릭시 발생 이벤트
         mBinding.imSendDetail.setOnClickListener(v -> {
-            String reply = mBinding.edReplyDetail.getText().toString();
-            replyList.add(reply);
-            postInfo.setReplies(replyList);
-            PresenterPost.getInstance().setReply(postInfo);
+            managePasswordDialog();
 
-            mAdapter.updateReplyList(replyList);
-            mBinding.edReplyDetail.setText("");
-            mBinding.tvRepliesCountDetailPost.setText(replyList.size()+"");
+            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(t -> {
+                String reply = mBinding.edReplyDetail.getText().toString();
+                String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
+                Replies re = new Replies(reply, Integer.parseInt(inputPassword));
+                Log.i("##INFO", "onViewClick(): re.getReply() = " + reply);
+                replyList.add(re);
+                Log.i("##INFO", "onViewClick(): replayList.size = " + replyList.size());
+                postInfo.setReplies(replyList);
+                PresenterPost.getInstance().setReply(postInfo);
+                dlg.dismiss();
+
+                mAdapter.updateReplyList(replyList);
+                mBinding.edReplyDetail.setText("");
+            });
+
+            Log.i("##INFO", "onViewClick(): replayList.size = " + replyList.size());
+//            mBinding.tvRepliesCountDetailPost.setText(replyList.size() + "");
 
             //댓글 입력시 자동으로 키보드 내림
             View view = this.getCurrentFocus();
             if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
 
         //삭제버튼 클릭시 게시글 삭제
         mBinding.tvDeleteContent.setOnClickListener(v -> {
-            Dialog dlg = new Dialog(ActivityDetailPost.this, R.style.theme_dialog);
-            dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dlg.setCanceledOnTouchOutside(false);
-            dlg.setCancelable(false);
-            dlg.setContentView(R.layout.dialog_check_password);
-            dlg.show();
+            managePasswordDialog();
 
             //상단에 취소키를 눌렀을때 다이얼로그창 종료
-            dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener( t -> {
+            dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(t -> {
                 dlg.dismiss();
             });
 
-            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener( t -> {
+            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(t -> {
                 String password = postInfo.getPassword();
                 String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
 
@@ -160,27 +186,21 @@ public class ActivityDetailPost extends AppCompatActivity {
 
         //수정하기 버튼 클릭시 실행 로직
         mBinding.tvModifyContent.setOnClickListener(v -> {
-            Dialog dlg = new Dialog(ActivityDetailPost.this, R.style.theme_dialog);
-            dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dlg.setCanceledOnTouchOutside(false);
-            dlg.setCancelable(false);
-            dlg.setContentView(R.layout.dialog_check_password);
-            dlg.show();
+            managePasswordDialog();
 
             //상단에 취소키를 눌렀을때 다이얼로그창 종료
-            dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener( t -> {
+            dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(t -> {
                 dlg.dismiss();
             });
 
-            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener( t -> {
+            dlg.findViewById(R.id.bt_ok_dialog).setOnClickListener(t -> {
                 String password = postInfo.getPassword();
                 String inputPassword = ((EditText) dlg.findViewById(R.id.ed_password_dialog)).getText().toString();
 
                 if (inputPassword.equals(password)) {
                     dlg.dismiss();
-                    Intent i = new Intent(ActivityDetailPost.this,ActivityWritePost.class);
-                    i.putExtra("postInfo",postInfo);
+                    Intent i = new Intent(ActivityDetailPost.this, ActivityWritePost.class);
+                    i.putExtra("postInfo", postInfo);
                     startActivity(i);
                     finish();
                 } else {
@@ -188,6 +208,28 @@ public class ActivityDetailPost extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void managePasswordDialog() {
+        dlg = new Dialog(ActivityDetailPost.this, R.style.theme_dialog);
+
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dlg.setCanceledOnTouchOutside(false);
+        dlg.setCancelable(false);
+        dlg.setContentView(R.layout.dialog_check_password);
+        dlg.show();
+
+        dlg.findViewById(R.id.im_cancel_dialog).setOnClickListener(t -> {
+            dlg.dismiss();
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, ActivityMainBoard.class));
+        finish();
+        super.onBackPressed();
     }
 }
 

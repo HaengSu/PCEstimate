@@ -11,18 +11,28 @@ public class PostDataModel implements Serializable {
     String title;
     String content;
     String password;
-    ArrayList<String> replies;
-//    ArrayList<Uri> pictures;
+    ArrayList<Replies> replies;
+    ArrayList<String> pictures;
 
     public PostDataModel() {
-    };
+    }
 
-    public PostDataModel(String title, String content, String password, ArrayList<String> replies) {
+    ;
+
+    public PostDataModel(String title, String content, String password, ArrayList<Replies> replies, ArrayList<String> pictures) {
         this.title = title;
         this.content = content;
         this.password = password;
         this.replies = replies;
+        this.pictures = pictures;
     }
+
+//    public PostDataModel(String title, String content, String password, ArrayList<String> replies) {
+//        this.title = title;
+//        this.content = content;
+//        this.password = password;
+//        this.replies = replies;
+//    }
 
     public String getTitle() {
         return title;
@@ -48,11 +58,11 @@ public class PostDataModel implements Serializable {
         this.password = password;
     }
 
-    public ArrayList<String> getReplies() {
+    public ArrayList<Replies> getReplies() {
         return replies;
     }
 
-    public void setReplies(ArrayList<String> replies) {
+    public void setReplies(ArrayList<Replies> replies) {
         this.replies = replies;
     }
 
@@ -64,12 +74,13 @@ public class PostDataModel implements Serializable {
         this.id = id;
     }
 
-    //    public ArrayList<Uri> getPictures() {
-//        return pictures;
-//    }
-//
-//    public void setPictures(ArrayList<Uri> pictures) {
-//        this.pictures = pictures;
-//    }
+    public ArrayList<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(ArrayList<String> pictures) {
+        this.pictures = pictures;
+    }
 }
+
 

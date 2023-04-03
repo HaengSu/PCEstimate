@@ -35,7 +35,7 @@ public class AdapterBoard extends RecyclerView.Adapter<AdapterBoard.ViewHolderMa
     @Override
     public void onBindViewHolder(@NonNull ViewHolderMainBoard holder, int position) {
         holder.title.setText(pList.get(position).getTitle());
-        holder.replayCount.setText("["+pList.get(position).getReplies().size()+""+"]");
+//        holder.replayCount.setText("["+pList.get(position).getReplies().size()+""+"]");
         holder.onItemClick();
     }
 

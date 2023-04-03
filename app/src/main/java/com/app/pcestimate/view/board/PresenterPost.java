@@ -1,10 +1,13 @@
 package com.app.pcestimate.view.board;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.app.pcestimate.R;
 import com.app.pcestimate.datamodel.PostDataModel;
+import com.app.pcestimate.datamodel.Replies;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -12,9 +15,11 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class PresenterPost {
@@ -42,6 +47,7 @@ public class PresenterPost {
         if (postInfo.getTitle().isEmpty() || postInfo.getContent().isEmpty() || postInfo.getPassword().isEmpty())
             return false;
         Log.i("##INFO", "setPost(): getId = "+ postInfo.getId());
+        Log.i("##INFO", "setPost(): getImage = "+ postInfo.getPictures().size());
         if (!postId.isEmpty()) {
             //case -> 게시글 수정
             db.collection(COLLECTION_PATH).document(postId).update("Posts", postInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -82,17 +88,18 @@ public class PresenterPost {
                         HashMap<String, PostDataModel> res = new HashMap<>();
                         res = (HashMap<String, PostDataModel>) snapshot.get("Posts");
 
+
                         if (res != null) {
                             PostDataModel data = new PostDataModel();
                             data.setId(snapshot.getId());
                             data.setTitle(String.valueOf(res.get("title")));
                             data.setContent(String.valueOf(res.get("content")));
                             data.setPassword(String.valueOf(res.get("password")));
-                            data.setReplies(new ArrayList<String>((Collection<? extends String>) res.get("replies")));
+                            data.setReplies(new ArrayList<Replies>((Collection<? extends Replies>) res.get("replies")));
+                            data.setPictures(new ArrayList<String>((Collection<? extends String>) res.get("pictures")));
 
-                            //region ---- Test Section  ---
+
                             Log.i("##INFO", "onSuccess(): data.getId = "+data.getId());
-                            //endregion
                             postsList.add(data);
                             callback.onResult(postsList);
                         }
