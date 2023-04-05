@@ -20,7 +20,7 @@
         android:theme="@style/Theme.PCEstimate"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityMain"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,6 +38,9 @@
             android:exported="true"/>
 
         <activity android:name=".view.estimate.ActivityEstimateResult"
+            android:exported="true"/>
+
+        <activity android:name=".view.board.ActivityBoardWriter"
             android:exported="true"/>
 
         <activity android:name=".view.board.ActivityMainBoard"
