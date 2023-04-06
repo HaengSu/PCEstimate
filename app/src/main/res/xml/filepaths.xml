@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+
+    <!--<file-path> =  내부 앱 스토리지 / getFileDir -->
+    <!--<cache-path> =  내부 앱 캐시 스토리지 / getCacheDir -->
+    <!--<external-files-path> = 외부 앱 전용 스토리지 file / getExternalFilesDir 사용시-->
+    <!--<external-cache-path> = 외부 앱 전용 스토리지 cache / getExternalCacheDir 사용시-->
+    <!--<external-path> = 공용 외부 저장소 사용 시 / Environment.getExternalStoragyDirectory-->
+<!--    //공유할 파일이 저장된 저장소에 따라 tag가 달라짐-->
+<!--    <external-files-path name="external-files" path="."/>-->
+    <files-path
+        name="files"
+        path="."/>
+</paths>

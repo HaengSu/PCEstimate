@@ -1,21 +1,59 @@
 package com.app.pcestimate.util;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.app.pcestimate.BuildConfig;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class FileUtils {
+
+    public static Bitmap viewToBitmap(View view) {
+        if(view.getMeasuredWidth() <= 0 || view.getMeasuredHeight() <= 0){
+            return null;
+        }
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    public static void shareImage(Context context, Bitmap bitmap){
+
+        String fileName = "estimate_" + System.currentTimeMillis() + ".jpg";
+        File file = saveImage(context, bitmap, fileName);
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("image/jpg");
+        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        i.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileprovider", file));
+        context.startActivity(i);
+
+    }
 
     public static File uriToFile(Context context, Uri uri) {
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -50,7 +88,19 @@ public class FileUtils {
         return null;
     }
 
-    public static void saveImage(Context context, Bitmap bitmap, String fileName) {
+    public static Uri bitmapToUri(Context context, Bitmap bitmap) {
+        try {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "estimate", null);
+            return Uri.parse(path);
+        } catch (Exception e) {
+            Log.e("#####", e.getLocalizedMessage());
+        }
+        return null;
+    }
+
+    public static File saveImage(Context context, Bitmap bitmap, String fileName) {
 
         File file = new File(getFilePath(context), fileName);
 
@@ -72,6 +122,49 @@ public class FileUtils {
         } catch (Exception e) {
             Log.d("#####", "파일 저장 실패.. ");
             Log.e("#######", e.getLocalizedMessage());
+        }
+
+        return file;
+    }
+
+    public static void saveImage(Context context, Uri uri, String fileName){
+
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/*");
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            values.put(MediaStore.Images.Media.IS_PENDING, 1);
+        }
+
+        ContentResolver contentResolver = context.getContentResolver();
+        Uri item = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        try{
+
+            ParcelFileDescriptor pdf = contentResolver.openFileDescriptor(item, "w", null);
+            if(pdf == null){
+                Log.e("####", "pdf is null..");
+            }else {
+                byte[] inputData = getBytes(context, uri);
+                FileOutputStream fos = new FileOutputStream(pdf.getFileDescriptor());
+                fos.write(inputData);
+                fos.close();
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                    values.clear();
+                    values.put(MediaStore.Images.Media.IS_PENDING, 0);
+                    contentResolver.update(item, values, null, null);
+                }
+
+                // 갱신
+//                galleryAddPic(context, fileName);
+
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
     }
@@ -129,5 +222,36 @@ public class FileUtils {
         result = filePath.substring(filePath.lastIndexOf("/") + 1, filePath.lastIndexOf("."));
 
         return result;
+    }
+
+    // Uri to ByteArr
+    public static byte[] getBytes(Context context, Uri image_uri) throws IOException {
+        InputStream iStream = context.getContentResolver().openInputStream(image_uri);
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024; // 버퍼 크기
+        byte[] buffer = new byte[bufferSize]; // 버퍼 배열
+
+        int len = 0;
+        // InputStream에서 읽어올 게 없을 때까지 바이트 배열에 쓴다.
+        while ((len = iStream.read(buffer)) != -1)
+            byteBuffer.write(buffer, 0, len);
+        return byteBuffer.toByteArray();
+    }
+
+    private static void galleryAddPic(Context context, String Image_Path) {
+
+        Log.d("Woongs","갱신 : "+Image_Path);
+
+        // 이전 사용 방식
+        /*Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(Image_Path);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.context.sendBroadcast(mediaScanIntent);*/
+
+        File file = new File(Image_Path);
+        MediaScannerConnection.scanFile(context,
+                new String[]{file.toString()},
+                null, null);
     }
 }

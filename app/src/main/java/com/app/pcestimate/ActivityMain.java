@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.app.pcestimate.databinding.ActivityMainBinding;
 import com.app.pcestimate.view.board.ActivityBoardWriter;
+import com.app.pcestimate.view.board.ActivityMainBoard;
 import com.app.pcestimate.view.estimate.ActivityPriceSelector;
 
 public class ActivityMain extends AppCompatActivity {
@@ -21,7 +22,6 @@ public class ActivityMain extends AppCompatActivity {
 
         setEvent();
 
-        mBinding.btnBoard.performClick();
     }
 
     private void setEvent(){
@@ -32,7 +32,7 @@ public class ActivityMain extends AppCompatActivity {
         });
 
         mBinding.btnBoard.setOnClickListener(v -> {
-            startActivity(new Intent(this, ActivityBoardWriter.class));
+            startActivity(new Intent(this, ActivityMainBoard.class));
             finish();
         });
 

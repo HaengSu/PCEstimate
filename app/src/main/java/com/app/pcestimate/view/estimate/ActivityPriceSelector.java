@@ -7,6 +7,7 @@ import android.widget.SeekBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.app.pcestimate.ActivityMain;
 import com.app.pcestimate.R;
 import com.app.pcestimate.databinding.ActivityPriceSelectorBinding;
 import com.app.pcestimate.datamodel.PriceDataModel;
@@ -44,7 +45,7 @@ public class ActivityPriceSelector extends AppCompatActivity {
 
         // back
         mBinding.btnBack.setOnClickListener(v -> {
-            finish();
+            onBackPressed();
         });
 
         // seekbar
@@ -71,4 +72,9 @@ public class ActivityPriceSelector extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, ActivityMain.class));
+        finish();
+    }
 }

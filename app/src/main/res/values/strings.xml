@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PCEstimate</string>
+
+    <string name="estimate_content_01">안녕하세요!</string>
+    <string name="estimate_content_02">컴퓨존 AI는 고객님이 선택하신\n가격대에 맞는 최적의 견적을 구성해 드립니다.\n\n현재 셀프 견적 내역은 초기화 됩니다.\n\n아래 총 견적 금액 선택 유무에 따라\n추천 상품, 가격대 기준으로 검색이 진행됩니다.</string>
+
+    <string name="estimate_loading">잠시만 기다려주세요.\n알맞은 상품을 찾아보고 있어요.</string>
 </resources>
